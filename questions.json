@@ -1,0 +1,123 @@
+[
+{
+	"question" : "By what name was the author Eric Blair better known?\nA) Aldous Huxley\nB) George Orwell\nC) Ernest Hemingway\nD) Ray Bradbury",
+	"type" : "multiple",
+	"answer": "B) George Orwell"
+},
+{
+	"question" : "Who wrote the children's story \"The Little Match Girl\"?\nA) Hans Christian Andersen\nB) Charles Dickens\nC) Lewis Carroll\nD) Oscar Wilde",
+	"type" : "multiple",
+	"answer": "A) Hans Christian Andersen"
+},
+{
+	"question" : "In \"The Hobbit\", who kills the dragon Smaug?\nA) Bilbo Baggins\nB) Gandalf the Grey\nC) Thorin Oakenshield\nD) Bard",
+	"type" : "multiple",
+	"answer": "D) Bard"
+},
+{
+	"question" : "Which of these book series is written by James Patterson?\nA) Harry Potter\nB) The Legend of Xanth\nC) The Bartemaeus Trilogy\nD) Maximum Ride",
+	"type" : "multiple",
+	"answer": "D) Maximum Ride"
+},
+{
+	"question" : "In Michael Crichton's novel \"Jurassic Park\", John Hammond meets his demise at the claws of which dinosaur?\nA) Procompsognathus\nB) Dilophosaurus\nC) Tyrannosaurus Rex\nD) Velociraptor",
+	"type" : "multiple",
+	"answer": "A) Procompsognathus"
+},
+{
+	"question" : "What is the name of the gang that Ponyboy is a part of in \"The Outsiders\"?\nA) The Outsiders\nB) The Mafia\nC) The Greasers\nD) The Socks",
+	"type" : "multiple",
+	"answer": "C) The Greasers"
+},
+{
+	"question" : "What book series published by Jim Butcher follows a wizard in modern day Chicago?\nA) The Dresden Files\nB) A Hat In Time\nC) The Cinder Spires\nD) My Life as a Teenage Wizard",
+	"type" : "multiple",
+	"answer": "A) The Dresden Files"
+},
+{
+	"question" : "In \"Little Women\", which of the March sisters married Laurie?\nA) Amy\nB) Beth\nC) Jo\nD) Meg",
+	"type" : "multiple",
+	"answer": "A) Amy"
+},
+{
+	"question" : "Which of the following authors was not born in England?\nA) Graham Greene\nB) Arthur Conan Doyle\nC) H.G. Wells\nD) Arthur C. Clarke",
+	"type" : "multiple",
+	"answer": "B) Arthur Conan Doyle"
+},
+{
+	"question" : "What is the fourth book of the Old Testament?\nA) Genesis\nB) Exodus\nC) Numbers\nD) Leviticus",
+	"type" : "multiple",
+	"answer": "C) Numbers"
+},
+{
+	"question" : "TRUE OR FALSE: Roald Dahl wrote \"Matilda\" after \"Charlie and the Chocolate Factory\".",
+	"type" : "truth",
+	"answer": "True"
+},
+{
+	"question" : "TRUE OR FALSE: Victor Hugo's first novel was published in the 18th century.",
+	"type" : "truth",
+	"answer": "False"
+},
+{
+	"question" : "TRUE OR FALSE: \"Life of Pi\" was written by Yann Martel.",
+	"type" : "truth",
+	"answer": "True"
+},
+{
+	"question" : "TRUE OR FALSE: Jane Austen had eight completed novels published.",
+	"type" : "truth",
+	"answer": "False"
+},
+{
+	"question" : "TRUE OR FALSE: Chinua Achebe was born in Nigeria.",
+	"type" : "truth",
+	"answer": "True"
+},
+{
+	"question" : "Which book was famously rejected by 12 publishers before finally being accepted by Bloomsbury?",
+	"type" : "regular",
+	"answer": "Harry Potter and The Philosopher’s Stone",
+	"answers": [
+		{"answer" : "Harry Potter"},
+		{"answer" : "Harry Potter and The Philosopher’s Stone"},
+		{"answer" : "Harry Potter and The Sorcerer’s Stone"},
+		{"answer" : "The Philosopher's Stone"},
+		{"answer" : "The Sorcerer's Stone"}
+	]
+},
+{
+	"question" : "What is the name of Washington Iriving’s 1819 short story about a man that fell asleep in the woods for 20 years?",
+	"type" : "regular",
+	"answer": "Rip Van Winkle",
+	"answers": [
+		{"answer" : "Rip Van Winkle"}
+	]
+},
+{
+	"question" : "Who wrote the 1936 novel \"Gone with the Wind\"?",
+	"type" : "regular",
+	"answer": "Margaret Mitchell",
+	"answers": [
+		{"answer" : "Margaret Mitchell"}
+	]
+},
+{
+	"question" : "What was the full name of British novelist C. S. Lewis?",
+	"type" : "regular",
+	"answer": "Clive Staples Lewis ",
+	"answers": [
+		{"answer" : "Clive Staples Lewis"},
+        {"answer" : "Clive Staples"}
+	]
+},
+{
+	"question" : "Who won the Nobel Prize for Literature in 2016?",
+	"type" : "regular",
+	"answer": "Bob Dylan",
+	"answers": [
+		{"answer" : "Bob Dylan"},
+		{"answer" : "Dylan"}
+	]
+}
+]
