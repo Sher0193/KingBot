@@ -583,6 +583,7 @@ client.on("message", async message => {
 		th.addScoreboard(message.channel);
 		if (th.getScoreboardById(message.channel.id) !== null) {
 				message.channel.send("Created scoreboard for channel " + message.channel.name);
+				th.saveScoreboards();
 		} else {
 				message.channel.send("Could not create scoreboard.");
 		}
@@ -593,6 +594,7 @@ client.on("message", async message => {
 		}
 		if (th.removeScoreboard(message.channel.id)) {
 			message.channel.send("Removed scoreboard for channel " + message.channel.name);
+			th.saveScoreboards();
 		} else {
 			message.channel.send("Could not remove scoreboard.");
 		}
@@ -643,30 +645,103 @@ client.on("message", async message => {
 		}
   }
   
-  if(command === "score" || command === "half") {
-	var amt = command === "score" ? 1 : 0.5;
+  if(command === "score" || command === "half" || command === "penalty" || command === "penaltyhalf") {
 	if (args[0] === undefined) {
 		message.channel.send("Please enter a list of names separated by commas e.g. \"!score Crosby, Stills, Nash, Young\"");
 		return;
+	} else {
+		arrs = new Array();
+		amts = new Array();
+		for (let i = args.length - 1; i >= 0; i--) {
+			if (args[i].charAt(args[i].length - 1) === ":") {
+				amtstring = args[i].slice(0, -1);
+				if (!isNaN(amtstring) && amtstring !== "") {
+					amts.push(parseFloat(amtstring));
+					arrs.push(args.splice(i + 1, args.length - i));
+					args.splice(i, 1);
+				} else {
+					return;
+				}
+			} else if (i === 0) {
+				amts.push(1);
+				arrs.push(args);
+			}
+		}
 	}
+	var scoreboard = th.getScoreboardById(message.channel.id);
+	for (let i = 0; i < arrs.length; i++) {
+		var amt = amts[i];
+		amt = command === "penalty" ? amt * -1 : command === "half" ? amt * 0.5 : command === "penaltyhalf" ? amt * -0.5 : amt;
+		newargs = arrs[i].join(" ").split(", ");
+		var points = amt === 1 ? "point" : "points";
+		var success = "Added " + amt + " " + points + " for ";
+		for (let i = 0; i < newargs.length; i++) {
+			success += newargs[i];
+			if (i < newargs.length - 1) {
+				success += ", ";
+			} else {
+				success += ".";
+			}
+		}
+		if (th.getTriviaById(message.channel.id) !== null) {
+			th.getTriviaById(message.channel.id).getScoreboard().addScores(newargs, amt);
+			message.channel.send(success);
+			//th.getTriviaById(message.channel.id).getScoreboard().printScores();
+		} else {
+			if (scoreboard !== null) {		
+				scoreboard.addScores(newargs, amt);
+				message.channel.send(success);
+				//scoreboard.printScores();
+				th.saveScoreboards();
+
+			} else {
+				message.channel.send("Could not find scoreboard.");
+				return;
+			}
+		}
+
+	}
+	if (th.getTriviaById(message.channel.id) !== null) {
+		th.getTriviaById(message.channel.id).getScoreboard().printScores();
+	} else {
+		scoreboard.printScores();
+	}
+
+	/*var amt = 1;
+	if (!isNaN(args[0])) {
+		amt = parseFloat(args.shift());
+	}
+	amt = command === "penalty" ? amt * -1 : command === "half" ? amt * 0.5 : command === "penaltyhalf" ? amt * -0.5 : amt;
 	newargs = args.join(" ").split(", ");
+	var points = amt === 1 ? "point" : "points";
+	var success = "Added " + amt + " " + points + " for ";
+	for (let i = 0; i < newargs.length; i++) {
+		success += newargs[i];
+		if (i < newargs.length - 1) {
+			success += ", ";
+		} else {
+			success += ".";
+		}
+	}
 	if (th.getTriviaById(message.channel.id) !== null) {
 		th.getTriviaById(message.channel.id).getScoreboard().addScores(newargs, amt);
+		message.channel.send(success);
 		th.getTriviaById(message.channel.id).getScoreboard().printScores();
 	} else {
 		var scoreboard = th.getScoreboardById(message.channel.id);
 		if (scoreboard !== null) {		
 			scoreboard.addScores(newargs, amt);
+			message.channel.send(success);
 			scoreboard.printScores();
 			th.saveScoreboards();
 
 		} else {
 			message.channel.send("Could not find scoreboard.");
 		}
-	}
+	}*/
   }
   
-  if(command === "penalty" || command === "penaltyhalf") {
+  /*if(command === "penalty" || command === "penaltyhalf") {
 	var amt = command === "penalty" ? 1 : 0.5;
 	if (args[0] === undefined) {
 		message.channel.send("Please enter a list of names separated by commas e.g. \"!score Crosby, Stills, Nash, Young\"");
@@ -686,7 +761,7 @@ client.on("message", async message => {
 			message.channel.send("Could not find scoreboard.");
 		}
 	}
-  }
+  }*/
   
   /*if(command === "kick") {
     // This command must be limited to mods and admins. In this example we just hardcode the role names.
