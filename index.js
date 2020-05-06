@@ -669,29 +669,26 @@ client.on("message", async message => {
 		}
 	}
 	var scoreboard = th.getScoreboardById(message.channel.id);
+	var success = "";
 	for (let i = 0; i < arrs.length; i++) {
 		var amt = amts[i];
 		amt = command === "penalty" ? amt * -1 : command === "half" ? amt * 0.5 : command === "penaltyhalf" ? amt * -0.5 : amt;
 		newargs = arrs[i].join(" ").split(", ");
 		var points = amt === 1 ? "point" : "points";
-		var success = "Added " + amt + " " + points + " for ";
+		success += "Added " + amt + " " + points + " for ";
 		for (let i = 0; i < newargs.length; i++) {
 			success += newargs[i];
 			if (i < newargs.length - 1) {
 				success += ", ";
 			} else {
-				success += ".";
+				success += ".\n";
 			}
 		}
 		if (th.getTriviaById(message.channel.id) !== null) {
 			th.getTriviaById(message.channel.id).getScoreboard().addScores(newargs, amt);
-			message.channel.send(success);
-			//th.getTriviaById(message.channel.id).getScoreboard().printScores();
 		} else {
 			if (scoreboard !== null) {		
 				scoreboard.addScores(newargs, amt);
-				message.channel.send(success);
-				//scoreboard.printScores();
 				th.saveScoreboards();
 
 			} else {
@@ -700,6 +697,9 @@ client.on("message", async message => {
 			}
 		}
 
+	}
+	if (success !== "") {
+		message.channel.send(success);	
 	}
 	if (th.getTriviaById(message.channel.id) !== null) {
 		th.getTriviaById(message.channel.id).getScoreboard().printScores();
