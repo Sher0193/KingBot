@@ -184,6 +184,7 @@ client.on("message", async message => {
 			break;
 		case "scoreboard":
 			helpString = "**BASICS**\n\"!scoreboard\" displays the current score for this channel's scoreboard.\n**CREATING A SCOREBOARD FOR THE CHANNEL**\nSimply use the command \"!scoreboard create\" to create a scoreboard. If one exists already, this command will overwrite the previous board.\n**CLEARING THE SCOREBOARD**\nThe current scoreboard may be erased from this channel with \"!scoreboard clear\".";
+			break;
 		case "say":
 			helpString = "The \"!say\" command will make KingBot echo a given statement, such as \"!say Hello, I'm KingBot!\". If you have given KingBot sufficient permissions, the original command will be deleted, leaving only KingBot's echo.";
 			break;
@@ -200,6 +201,7 @@ client.on("message", async message => {
 			helpString = "Outputs information about the bot.";
 			break;
 		default: helpString = "**COMMANDS** ```!scoreboard\n!score\n!trivia\n!say\n!lev\n!ping\n!help\n!about``` Type \"!help [command]\" to learn more about a command, eg \"!help help\".";
+			break;
 	}
 	message.channel.send(helpString);
   }
