@@ -83,7 +83,7 @@ class TriviaHandler {
 				jsonSave += "]"
 			}
 		}
-		fs.writeFile('../../data/sbsave.json', jsonSave, function (err) {
+		fs.writeFile('data/sbsave.json', jsonSave, function (err) {
 			if (err) throw err;
 			//console.log('Saved!');
 		}); 
