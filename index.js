@@ -138,7 +138,7 @@ client.on("message", async message => {
   }
   
   if(command === "lev") {
-	var dist = utilslevDist(args[0], args[1]);
+	var dist = utils.levDist(args[0], args[1]);
 	message.channel.send("The Levenshtein Distance between " + args[0] + " and " + args[1] + " is " + dist + ".");
   }
   
