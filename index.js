@@ -234,7 +234,7 @@ client.on("message", async message => {
 	for (let i = 0; i < arrs.length; i++) {
 		var amt = amts[i];
 		amt = command === "penalty" ? amt * -1 : command === "half" ? amt * 0.5 : command === "penaltyhalf" ? amt * -0.5 : amt;
-		newargs = arrs[i].join(" ").split(", ");
+		newargs = arrs[i].join("").split(",");
 		var points = amt === 1 ? "point" : "points";
 		success += "Added " + amt + " " + points + " for ";
 		for (let i = 0; i < newargs.length; i++) {

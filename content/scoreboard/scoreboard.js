@@ -20,6 +20,7 @@ class Scoreboard {
 	}
 	
 	printScores(end) {
+		this.sort();
 		if (this.channel != null) {
 			var channel = this.channel;
 			channel.send("```" + this.scoresToString(end) + "```");
@@ -29,7 +30,7 @@ class Scoreboard {
 	scoresToString(end) {
 		var string = end ? "Final Score:\n" : "Current Score:\n";
 		for (let i = 0; i < this.users.length; i++) {
-			if (this.scores[i] > 0) {
+			if (this.scores[i] > 0 && this.users[i] !== "") {
 				string += this.users[i] + ": " + this.scores[i] + "\n";
 			}
 		}
@@ -54,6 +55,25 @@ class Scoreboard {
 	addScores(users, amt) {
 		for (let i = 0; i < users.length; i++) {
 			this.addScore(users[i], amt);
+		}
+	}
+	
+	sort() {
+		var len = this.scores.length;
+
+		for (var i = 0; i < len; i++) {
+			for (var j = 0; j < len - i - 1; j++) {
+				if (this.scores[j] < this.scores[j + 1]) {
+					// swap scores
+					var tempScore = this.scores[j];
+					this.scores[j] = this.scores[j + 1];
+					this.scores[j + 1] = tempScore;
+					// swap users
+					var tempUser = this.users[j];
+					this.users[j] = this.users[j + 1];
+					this.users[j + 1] = tempUser;
+				}
+			}
 		}
 	}
 	

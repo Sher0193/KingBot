@@ -98,8 +98,11 @@ class TriviaHandler {
 			if (channel === null) {
 				continue;
 			}
-			this.scoreboards.push(new Scoreboard(client.channels.get(boards[i]["channel"]["id"]), boards[i]["scores"], boards[i]["users"]));
-			count++;
+			var sb = new Scoreboard(client.channels.get(boards[i]["channel"]["id"]), boards[i]["scores"], boards[i]["users"]);
+			if (this.getScoreboardById(sb.getId()) === null) {
+				this.scoreboards.push(sb);
+				count++;
+			}
 		}
 		if (count > 0) {
 			console.log("Loaded " + count + " scoreboards.");
