@@ -136,6 +136,16 @@ client.on("message", async message => {
 		}
 	}
   }
+
+  if(command === "roll") {
+  	if (!isNaN(args[0])) {
+		var num = Math.ceil((Math.random() * args[0]));
+		message.channel.send("(1-" + args[0] + ") :game_die: " + num);
+	} else {
+		var num = Math.ceil((Math.random() * 6));
+		message.channel.send("(1-6) :game_die: " + num);
+	}
+  }
   
   if(command === "lev") {
 	var dist = utils.levDist(args[0], args[1]);
@@ -144,7 +154,7 @@ client.on("message", async message => {
   
   if(command === "ping") {
     // Calculates ping between sending a message and editing it, giving a nice round-trip latency.
-    // The second ping is an average latency between the bot and the websocket server (one-way, not round-trip)
+    // The second ping is an average latency between the bot and the websocket server (one-way, not round-tripiiiiiiiiuuuuu)
     const m = await message.channel.send("Ping?");
     m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
   }
