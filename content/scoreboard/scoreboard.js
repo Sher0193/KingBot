@@ -39,15 +39,16 @@ class Scoreboard {
 	
 	addScore(user, amt) {
 		var found = false;
+		var toTry = user.trim();
 		for (let j = 0; j < this.users.length; j++) {
-			if (this.users[j].toLowerCase() === user.toLowerCase()) {
+			if (toTry.toLowerCase() === this.users[j].toLowerCase()) {
 				found = true;
 				this.scores[j] = this.scores[j] + amt;
 				break;
 			}
 		}
 		if (!found) {
-			this.users.push(user.charAt(0).toUpperCase() + user.slice(1).toLowerCase());
+			this.users.push((toTry.charAt(0).toUpperCase() + toTry.slice(1).toLowerCase()));
 			this.scores.push(amt);
 		}
 	}
