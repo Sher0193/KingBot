@@ -224,8 +224,12 @@ client.on("message", async message => {
 		arrs = new Array();
 		amts = new Array();
 		for (let i = args.length - 1; i >= 0; i--) {
-			if (args[i].charAt(args[i].length - 1) === ":") {
-				amtstring = args[i].slice(0, -1);
+			if (args[i].charAt(args[i].length - 1) === ":" || !isNaN(args[i])) { // add passed number to amts, number: is legacy
+				if (args[i].charAt(args[i].length - 1) == ":") {
+					amtstring = args[i].slice(0, -1);
+				} else {
+					amtstring = args[i];
+				}
 				if (!isNaN(amtstring) && amtstring !== "") {
 					amts.push(parseFloat(amtstring));
 					arrs.push(args.splice(i + 1, args.length - i));
