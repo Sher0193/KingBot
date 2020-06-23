@@ -181,38 +181,24 @@ client.on("message", async message => {
   }
 
   if (command === "help") {
-	helpString = "Something went wrong. Contact admin.";
+	let helpString = "Something went wrong. Contact admin.";
+    let commandList = "";
+    let list = require("./data/help.json");
+    let i = 0;
 	if (args[0] === undefined) {
 		args.push("default");
 	}
-	switch (args[0]) {
-		case "help": 
-			helpString = "Use \"!help\" to view an explanation for the various functions of Kingbot. Use \"!help [command]\" to view an explanation for that command.";
-			break;
-		case "score": 
-			helpString = "**BASICS**\nUse \"!score\" to add points for a list of users to the channel's scoreboard. A scoreboard must have been created for the channel with \"!scoreboard create\".\n\"!score\" requires a comma-separated list of names, such as \"!score Crosby, Stills, Nash, Young\".\n**MULTIPLE POINT VALUES**\nBy default, \"!score\" will award one point. In addition, \"!half\" will award 0.5 points, \"!penalty\" will award -1 point, and \"!penaltyhalf\" will award -0.5 points.\nYou may precede a list of names with a number and colon to award that value to the following list, such as \"!score 5: Crosby, Stills, Nash, Young\", which will award 5 points. You may mix point values in a single command, such as \"!score 5: Crosby, Stills 10: Nash, Young\", which will award 5 to Crosby and Stills, then 10 to Nash and Young.";
-			break;
-		case "scoreboard":
-			helpString = "**BASICS**\n\"!scoreboard\" displays the current score for this channel's scoreboard.\n**CREATING A SCOREBOARD FOR THE CHANNEL**\nSimply use the command \"!scoreboard create\" to create a scoreboard. If one exists already, this command will overwrite the previous board.\n**CLEARING THE SCOREBOARD**\nThe current scoreboard may be erased from this channel with \"!scoreboard clear\".";
-			break;
-		case "say":
-			helpString = "The \"!say\" command will make KingBot echo a given statement, such as \"!say Hello, I'm KingBot!\". If you have given KingBot sufficient permissions, the original command will be deleted, leaving only KingBot's echo.";
-			break;
-		case "ping":
-			helpString = "KingBot will measure and output the time it takes in milliseconds to receive a response from its server.";
-			break;
-		case "lev":
-			helpString = "A debugging command. Measures the morphological distance between two words using the Levenschtein Distance algorithm.";
-			break;
-		case "trivia":
-			helpString = "Begins a Trivia game. Contestants must wait for KingBot to say \"GO\" after delivering a question before submitting their answers. A trivia game will override the channel's scoreboard. The command \"!next\" must be used between questions to advance to the next one.\nGenerally unstable WIP.";
-			break;
-		case "about":
-			helpString = "Outputs information about the bot.";
-			break;
-		default: helpString = "**COMMANDS** ```!scoreboard\n!score\n!trivia\n!say\n!lev\n!ping\n!help\n!about``` Type \"!help [command]\" to learn more about a command, eg \"!help help\".";
-			break;
-	}
+    if (list !== null) {
+        for (i = 0; i < list.length; i++) {
+            commandList += ("\n" + config.prefix + list[i]["command"]);
+            if (args[0] === list[i]["command"]) {
+                helpString = list[i]["explanation"];
+            }
+        }
+        if (i >= list.length) {
+            helpString = ("**COMMANDS** ```" + commandList + "``` Type \"!help [command]\" to learn more about a command, eg \"!help help\".");
+        }
+    }
 	message.channel.send(helpString);
   }
   

@@ -1,0 +1,34 @@
+[
+{
+	"command" : "help",
+	"explanation" : "Use \"!help\" to view an explanation for the various functions of Kingbot. Use \"!help [command]\" to view an explanation for that command."
+},
+{
+	"command" : "score",
+	"explanation" : "**BASICS**\nUse \"!score\" to add points for a list of users to the channel's scoreboard. A scoreboard must have been created for the channel with \"!scoreboard create\".\n\"!score\" requires a comma-separated list of names, such as \"!score Crosby, Stills, Nash, Young\".\n**MULTIPLE POINT VALUES**\nBy default, \"!score\" will award one point. In addition, \"!half\" will award 0.5 points, \"!penalty\" will award -1 point, and \"!penaltyhalf\" will award -0.5 points.\nYou may precede a list of names with a number and colon to award that value to the following list, such as \"!score 5: Crosby, Stills, Nash, Young\", which will award 5 points. You may mix point values in a single command, such as \"!score 5: Crosby, Stills 10: Nash, Young\", which will award 5 to Crosby and Stills, then 10 to Nash and Young."
+},
+{
+	"command" : "scoreboard",
+	"explanation" : "**BASICS**\n\"!scoreboard\" displays the current score for this channel's scoreboard.\n**CREATING A SCOREBOARD FOR THE CHANNEL**\nSimply use the command \"!scoreboard create\" to create a scoreboard. If one exists already, this command will overwrite the previous board.\n**CLEARING THE SCOREBOARD**\nThe current scoreboard may be erased from this channel with \"!scoreboard clear\"."
+},
+{
+	"command" : "say",
+	"explanation" : "The \"!say\" command will make KingBot echo a given statement, such as \"!say Hello, I'm KingBot!\". If you have given KingBot sufficient permissions, the original command will be deleted, leaving only KingBot's echo."
+},
+{
+	"command" : "ping",
+	"explanation" : "KingBot will measure and output the time it takes in milliseconds to receive a response from its server."
+},
+{
+	"command" : "lev",
+	"explanation" : "A debugging command. Measures the morphological distance between two words using the Levenschtein Distance algorithm."
+},
+{
+	"command" : "trivia",
+	"explanation" : "Begins a Trivia game. Contestants must wait for KingBot to say \"GO\" after delivering a question before submitting their answers. A trivia game will override the channel's scoreboard. The command \"!next\" must be used between questions to advance to the next one.\nGenerally unstable WIP."
+},
+{
+	"command" : "about",
+	"explanation" : "Outputs information about the bot."
+}
+]
