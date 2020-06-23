@@ -193,6 +193,7 @@ client.on("message", async message => {
             commandList += ("\n" + config.prefix + list[i]["command"]);
             if (args[0] === list[i]["command"]) {
                 helpString = list[i]["explanation"];
+                break;
             }
         }
         if (i >= list.length) {
