@@ -195,7 +195,7 @@ client.on("message", async message => {
         
         let minutes = Math.floor(uptime / 60000);
 
-        message.channel.send("Uptime is " + (days > 0 ? (days + " day" + (days === 1 ? "" : "s") + ", ") : "") + (hours > 0 ? (hours + " hour" + (hours === 1 ? "" : "s") + ", ") : "") + minutes + " minute" + (minutes === 1 ? ("") : "s") +".");
+        message.channel.send("Kingbot has been online for " + (days > 0 ? (days + " day" + (days === 1 ? "" : "s") + ", ") : "") + (hours > 0 ? (hours + " hour" + (hours === 1 ? "" : "s") + ", ") : "") + minutes + " minute" + (minutes === 1 ? ("") : "s") +".");
   }
 
   if (command === "help") {

@@ -34,5 +34,9 @@
 {
     "command" : "roll",
     "explanation" : "``!roll x`` will return a random number between 1 and x. If no number is specified, ``!roll`` returns a number between 1 and 6."
+},
+{
+    "command" : "uptime",
+    "explanation" : "How long the bot has been online."
 }
 ]
