@@ -1,6 +1,9 @@
 const utils = require('./utils/utils.js');
 const TriviaHandler = require('./content/trivia/triviahandler.js');
 
+// Set launch time for uptime calc
+const launchTime = new Date().getTime();
+
 // Load up the discord.js library
 const Discord = require("discord.js");
 
@@ -179,6 +182,21 @@ client.on("message", async message => {
 			th.getTriviaById(message.channel.id).resume();
 		}
   }
+  
+  if (command === "uptime") {
+        let curTime = new Date().getTime();
+        let uptime = curTime - launchTime;
+        
+        let days = Math.floor(uptime / 86400000);
+        uptime %= 86400000;
+        
+        let hours = Math.floor(uptime / 3600000);
+        uptime %= 3600000;
+        
+        let minutes = Math.floor(uptime / 60000);
+
+        message.channel.send("Uptime is " + (days > 0 ? (days + " day" + (days === 1 ? "" : "s") + ", ") : "") + (hours > 0 ? (hours + " hour" + (hours === 1 ? "" : "s") + ", ") : "") + minutes + " minute" + (minutes === 1 ? ("") : "s") +".");
+  }
 
   if (command === "help") {
 	let helpString = "Something went wrong. Contact admin.";
@@ -268,63 +286,7 @@ client.on("message", async message => {
 	} else {
 		scoreboard.printScores();
 	}
-
-	/*var amt = 1;
-	if (!isNaN(args[0])) {
-		amt = parseFloat(args.shift());
-	}
-	amt = command === "penalty" ? amt * -1 : command === "half" ? amt * 0.5 : command === "penaltyhalf" ? amt * -0.5 : amt;
-	newargs = args.join(" ").split(", ");
-	var points = amt === 1 ? "point" : "points";
-	var success = "Added " + amt + " " + points + " for ";
-	for (let i = 0; i < newargs.length; i++) {
-		success += newargs[i];
-		if (i < newargs.length - 1) {
-			success += ", ";
-		} else {
-			success += ".";
-		}
-	}
-	if (th.getTriviaById(message.channel.id) !== null) {
-		th.getTriviaById(message.channel.id).getScoreboard().addScores(newargs, amt);
-		message.channel.send(success);
-		th.getTriviaById(message.channel.id).getScoreboard().printScores();
-	} else {
-		var scoreboard = th.getScoreboardById(message.channel.id);
-		if (scoreboard !== null) {		
-			scoreboard.addScores(newargs, amt);
-			message.channel.send(success);
-			scoreboard.printScores();
-			th.saveScoreboards();
-
-		} else {
-			message.channel.send("Could not find scoreboard.");
-		}
-	}*/
   }
-  
-  /*if(command === "penalty" || command === "penaltyhalf") {
-	var amt = command === "penalty" ? 1 : 0.5;
-	if (args[0] === undefined) {
-		message.channel.send("Please enter a list of names separated by commas e.g. \"!score Crosby, Stills, Nash, Young\"");
-		return;
-	}
-	newargs = args.join(" ").split(", ");
-	if (th.getTriviaById(message.channel.id) !== null) {
-		th.getTriviaById(message.channel.id).getScoreboard().removeScores(newargs, amt);
-		th.getTriviaById(message.channel.id).getScoreboard().printScores();
-	} else {
-		var scoreboard = th.getScoreboardById(message.channel.id);
-		if (scoreboard !== null) {		
-			scoreboard.removeScores(newargs, amt);
-			scoreboard.printScores();
-
-		} else {
-			message.channel.send("Could not find scoreboard.");
-		}
-	}
-  }*/
-  
   /*if(command === "kick") {
     // This command must be limited to mods and admins. In this example we just hardcode the role names.
     // Please read on Array.some() to understand this bit: 
