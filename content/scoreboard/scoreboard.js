@@ -1,3 +1,6 @@
+const Discord = require("discord.js");
+const utils = require('../../utils/utils.js');
+
 class Scoreboard {
 	
 	scores = new Array();
@@ -16,22 +19,29 @@ class Scoreboard {
 	}
 	
 	getId() {
-		return this.channel.id;
+		return this.channel;
 	}
 	
-	printScores(end) {
+	buildScoreboard(end) {
 		this.sort();
 		if (this.channel != null) {
-			var channel = this.channel;
-			channel.send("```" + this.scoresToString(end) + "```");
+            const scoreEmbed = new Discord.MessageEmbed()
+            .setColor('RANDOM')
+            .setTitle(end ? "Final Score:\n" : "Current Score:\n")
+            .setDescription(this.scoresToString(end));
+// 			var channel = this.channel;
+// 			channel.send(scoreEmbed);
+            return scoreEmbed;
 		}
 	}
 	
 	scoresToString(end) {
-		var string = end ? "Final Score:\n" : "Current Score:\n";
-		for (let i = 0; i < this.users.length; i++) {
+ 		var string = "";
+		for (let i = 0, j = 1; i < this.users.length; i++) {
 			if (this.scores[i] > 0 && this.users[i] !== "") {
-				string += this.users[i] + ": " + this.scores[i] + "\n";
+                if (i > 0 && this.scores[i] < this.scores[i - 1])
+                    j = i + 1;
+				string += (j === 1 ? ":first_place:" : j === 2 ? ":second_place:" : j === 3 ? ":third_place:" : ("*" + utils.ordinal(j) + "*")) + " **" + this.users[i] + "**: " + this.scores[i] + "\n";
 			}
 		}
 		return string;
@@ -43,13 +53,15 @@ class Scoreboard {
 		for (let j = 0; j < this.users.length; j++) {
 			if (toTry.toLowerCase() === this.users[j].toLowerCase()) {
 				found = true;
-				this.scores[j] = this.scores[j] + amt;
+				this.scores[j] = this.scores[j] + amt < 0 ? 0 : this.scores[j] + amt;
 				break;
 			}
 		}
 		if (!found) {
-			this.users.push((toTry.charAt(0).toUpperCase() + toTry.slice(1).toLowerCase()));
-			this.scores.push(amt);
+            if (toTry !== "" && amt > 0) {
+                this.users.push((toTry.charAt(0).toUpperCase() + toTry.slice(1).toLowerCase()));
+                this.scores.push(amt);
+            }
 		}
 	}
 	

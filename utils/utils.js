@@ -49,4 +49,15 @@ const levDist = function(s, t) {
     return d[n][m];
 }
 
+const ordinal = function (n) {
+    
+    var string = "";
+    var sigDigit = n % 10;
+    var postfix = sigDigit === 1 && n % 100 != 11 ? "st" : sigDigit === 2 && n % 100 != 12 ? "nd" : sigDigit === 3 && n % 100 != 13 ? "rd" : "th";
+    string = n + postfix;
+    return string;
+    
+}
+
+exports.ordinal = ordinal;
 exports.levDist = levDist;

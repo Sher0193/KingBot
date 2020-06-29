@@ -1,5 +1,6 @@
 const utils = require('./utils/utils.js');
 const TriviaHandler = require('./content/trivia/triviahandler.js');
+const ScoreboardHandler = require('./content/scoreboard/scoreboardhandler.js');
 
 // Set launch time for uptime calc
 const launchTime = new Date().getTime();
@@ -7,9 +8,7 @@ const launchTime = new Date().getTime();
 // Load up the discord.js library
 const Discord = require("discord.js");
 
-// This is your client. Some people call it `bot`, some people call it `self`, 
-// some might call it `cootchie`. Either way, when you see `client.something`, or `bot.something`,
-// this is what we're refering to. Your client.
+// Discord Client
 const client = new Discord.Client();
 
 // Here we load the config.json file that contains our token and our prefix values. 
@@ -17,27 +16,28 @@ const config = require("./config.json");
 // config.token contains the bot's token
 // config.prefix contains the message prefix.
 
-const th = new TriviaHandler();
+//const th = new TriviaHandler();
+const sh = new ScoreboardHandler();
 
 client.on("ready", () => {
   // This event will run if the bot starts, and logs in, successfully.
-  console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
-  th.loadScoreboards(client);
+  console.log(`Bot has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds.`); 
+  sh.loadScoreboards();
   // Example of changing the bot's playing game to something useful. `client.user` is what the
   // docs refer to as the "ClientUser".
-  //client.user.setActivity(`King family bot.`);
+  client.user.setActivity(`!help`);
 });
 
 client.on("guildCreate", guild => {
   // This event triggers when the bot joins a guild.
   console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
-  client.user.setActivity(`Serving ${client.guilds.size} servers`);
+  //client.user.setActivity(`Serving ${client.guilds.size} servers`);
 });
 
 client.on("guildDelete", guild => {
   // this event triggers when the bot is removed from a guild.
   console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-  client.user.setActivity(`Serving ${client.guilds.size} servers`);
+  //client.user.setActivity(`Serving ${client.guilds.size} servers`);
 });
 
 
@@ -48,10 +48,10 @@ client.on("message", async message => {
   // and not get into a spam loop (we call that "botception").
   if(message.author.bot) return;
   
-  if(th.getTriviaById(message.channel.id) !== null
-	&& th.getTriviaById(message.channel.id).isActive()) {
-		th.getTriviaById(message.channel.id).processGuess(message.member.user.username, message.content);
-  }
+//   if(th.getTriviaById(message.channel.id) !== null
+// 	&& th.getTriviaById(message.channel.id).isActive()) {
+// 		th.getTriviaById(message.channel.id).processGuess(message.member.user.username, message.content);
+//   }
   
   // Also good practice to ignore any message that does not start with our prefix, 
   // which is set in the configuration file.
@@ -64,79 +64,104 @@ client.on("message", async message => {
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
   
-  // Let's go with a few common example commands! Feel free to delete or change those.
-  
+  // Handling for all "trivia" commands
   if(command.includes("trivia")) {
-	if (message.member === null) {
-		return;
-	}
-	if (command === "trivia") {
-		th.addTrivia(message.channel);
-		return;
-	}
-	if (th.getTriviaById(message.channel.id) === null) {
-		return;
-	}
-	if (command === "triviascores") {
-		th.getTriviaById(message.channel.id).printScores();
-	}
-	if (command === "triviahelp") {
-		th.getTriviaById(message.channel.id).printHelp();
-	}
-	if (command === "triviaend") {
-		th.removeTrivia(message.channel.id);
-	}
-	if (command === "triviapause") {
-		message.channel.send("Manual pausing temporarily disabled due to instability. Trivia games will automatically pause between questions.");
-		//th.getTriviaById(message.channel.id).pauseGame();
-	}
-	if (command === "triviaresume") {
-		th.getTriviaById(message.channel.id).resume();
-	}
+// 	if (message.member === null) {
+// 		return;
+// 	}
+// 	if (command === "trivia") {
+// 		th.addTrivia(message.channel);
+// 		return;
+// 	}
+// 	if (th.getTriviaById(message.channel.id) === null) {
+// 		return;
+// 	}
+// 	if (command === "triviascores") {
+// 		th.getTriviaById(message.channel.id).printScores();
+// 	}
+// 	if (command === "triviahelp") {
+// 		th.getTriviaById(message.channel.id).printHelp();
+// 	}
+// 	if (command === "triviaend") {
+// 		th.removeTrivia(message.channel.id);
+// 	}
+// 	if (command === "triviapause") {
+// 		message.channel.send("Manual pausing temporarily disabled due to instability. Trivia games will automatically pause between questions.");
+// 		//th.getTriviaById(message.channel.id).pauseGame();
+// 	}
+// 	if (command === "triviaresume") {
+// 		th.getTriviaById(message.channel.id).resume();
+// 	}
+    message.channel.send("Trivia is currently disabled.");
   }
 
   if (command === "about") {
   	message.channel.send("KingBot is created by Dylan Sherwood, based on template by Eslachance.");
   }
   
+  
+  //Left In As Convenient Embed Example
+  /*if (command === "embed") {
+  
+    const exampleEmbed = new Discord.MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle('Some title')
+        .setURL('https://discord.js.org/')
+        .setAuthor('Some name', 'https://i.imgur.com/wSTFkRM.png', 'https://discord.js.org')
+        .setDescription('Some description here')
+        .setThumbnail('https://i.imgur.com/wSTFkRM.png')
+        .addFields(
+            { name: 'Regular field title', value: 'Some value here' },
+            { name: '\u200B', value: '\u200B' },
+            { name: 'Inline field title', value: 'Some value here', inline: true },
+            { name: 'Inline field title', value: 'Some value here', inline: true },
+        )
+        .addField('Inline field title', 'Some value here', true)
+        .setImage('https://i.imgur.com/wSTFkRM.png')
+        .setTimestamp()
+        .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
+
+        message.channel.send(exampleEmbed);    
+  }*/
+  
   if (command === "scoreboard") {
 	if (message.member === null) {
 			return;
 	}
 	if (args[0] === "create") {
-		if (th.getTriviaById(message.channel.id) !== null) {
-			message.channel.send("Scoreboard in use by an active Trivia game. Please stop the trivia game with !triviaend first to add a new scoreboard.");
-			return;
-		}
-		th.addScoreboard(message.channel);
-		if (th.getScoreboardById(message.channel.id) !== null) {
+// 		if (th.getTriviaById(message.channel.id) !== null) {
+// 			message.channel.send("Scoreboard in use by an active Trivia game. Please stop the trivia game with !triviaend first to add a new scoreboard.");
+// 			return;
+// 		}
+		sh.addScoreboard(message.channel.id);
+		if (sh.getScoreboardById(message.channel.id) !== null) {
 				message.channel.send("Created scoreboard for channel " + message.channel.name);
-				th.saveScoreboards();
+				sh.saveScoreboards();
 		} else {
 				message.channel.send("Could not create scoreboard.");
 		}
 	} else if (args[0] === "clear") {
-		if (th.getTriviaById(message.channel.id) !== null) {
-			message.channel.send("Scoreboard in use by an active Trivia game. Please stop the trivia game with !triviaend to remove the current scoreboard.");
-			return;
-		}
-		if (th.removeScoreboard(message.channel.id)) {
+// 		if (th.getTriviaById(message.channel.id) !== null) {
+// 			message.channel.send("Scoreboard in use by an active Trivia game. Please stop the trivia game with !triviaend to remove the current scoreboard.");
+// 			return;
+// 		}
+		if (sh.removeScoreboard(message.channel.id)) {
 			message.channel.send("Removed scoreboard for channel " + message.channel.name);
-			th.saveScoreboards();
+			sh.saveScoreboards();
 		} else {
 			message.channel.send("Could not remove scoreboard.");
 		}
 	} else {
-		if (th.getTriviaById(message.channel.id) !== null) {
+		/*if (th.getTriviaById(message.channel.id) !== null) {
 			th.getTriviaById(message.channel.id).getScoreboard().printScores();
-		} else {
-			var scoreboard = th.getScoreboardById(message.channel.id);
+		} else {*/
+			var scoreboard = sh.getScoreboardById(message.channel.id);
 			if (scoreboard !== null) {
-				scoreboard.printScores();
+				message.channel.send(scoreboard.buildScoreboard());
 			} else {
 				message.channel.send("Could not find scoreboard.");
 			}
-		}
+		//}
 	}
   }
 
@@ -159,7 +184,7 @@ client.on("message", async message => {
     // Calculates ping between sending a message and editing it, giving a nice round-trip latency.
     // The second ping is an average latency between the bot and the websocket server (one-way, not round-tripiiiiiiiiuuuuu)
     const m = await message.channel.send("Ping?");
-    m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
+    m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
   }
   
   if(command === "say") {
@@ -173,14 +198,14 @@ client.on("message", async message => {
   }
   
   if (command === "save") {
-	th.saveScoreboards();
+	sh.saveScoreboards();
 	message.channel.send("Saved all scoreboards for all channels.");
   }
   
   if (command === "next") {
-		if (th.getTriviaById(message.channel.id) !== null) {
-			th.getTriviaById(message.channel.id).resume();
-		}
+// 		if (th.getTriviaById(message.channel.id) !== null) {
+// 			th.getTriviaById(message.channel.id).resume();
+// 		}
   }
   
   if (command === "uptime") {
@@ -195,6 +220,7 @@ client.on("message", async message => {
         
         let minutes = Math.floor(uptime / 60000);
 
+        //TODO: format method in utils
         message.channel.send("Kingbot has been online for " + (days > 0 ? (days + " day" + (days === 1 ? "" : "s") + ", ") : "") + (hours > 0 ? (hours + " hour" + (hours === 1 ? "" : "s") + ", ") : "") + minutes + " minute" + (minutes === 1 ? ("") : "s") +".");
   }
 
@@ -215,7 +241,14 @@ client.on("message", async message => {
             }
         }
         if (i >= list.length) {
-            helpString = ("**COMMANDS** ```" + commandList + "``` Type \"!help [command]\" to learn more about a command, eg \"!help help\".");
+            const scoreEmbed = new Discord.MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle("Commands")
+            .setDescription(commandList)
+            .setFooter('Type \"!help [command]\" to learn more about a command, eg \"!help help\".');
+			var channel = this.channel;
+			message.channel.send(scoreEmbed);
+            return;
         }
     }
 	message.channel.send(helpString);
@@ -248,7 +281,7 @@ client.on("message", async message => {
 			}
 		}
 	}
-	var scoreboard = th.getScoreboardById(message.channel.id);
+	var scoreboard = sh.getScoreboardById(message.channel.id);
 	var success = "";
 	for (let i = 0; i < arrs.length; i++) {
 		var amt = amts[i];
@@ -264,28 +297,28 @@ client.on("message", async message => {
 				success += ".\n";
 			}
 		}
-		if (th.getTriviaById(message.channel.id) !== null) {
-			th.getTriviaById(message.channel.id).getScoreboard().addScores(newargs, amt);
-		} else {
+// 		if (th.getTriviaById(message.channel.id) !== null) {
+// 			th.getTriviaById(message.channel.id).getScoreboard().addScores(newargs, amt);
+// 		} else {
 			if (scoreboard !== null) {		
 				scoreboard.addScores(newargs, amt);
-				th.saveScoreboards();
+				sh.saveScoreboards();
 
 			} else {
 				message.channel.send("Could not find scoreboard.");
 				return;
 			}
-		}
+		//}
 
 	}
 	if (success !== "") {
 		message.channel.send(success);	
 	}
-	if (th.getTriviaById(message.channel.id) !== null) {
-		th.getTriviaById(message.channel.id).getScoreboard().printScores();
-	} else {
-		scoreboard.printScores();
-	}
+// 	if (th.getTriviaById(message.channel.id) !== null) {
+// 		th.getTriviaById(message.channel.id).getScoreboard().printScores();
+// 	} else {
+		message.channel.send(scoreboard.buildScoreboard());
+//	}
   }
   /*if(command === "kick") {
     // This command must be limited to mods and admins. In this example we just hardcode the role names.

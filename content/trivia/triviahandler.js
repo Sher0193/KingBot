@@ -94,11 +94,11 @@ class TriviaHandler {
 		var count = 0;
 		
 		for (let i = 0; i < boards.length; i++) {
-			var channel = client.channels.get(boards[i]["channel"]["id"]);
+			var channel = client.channels.cache.get(boards[i]["channel"]["id"]);
 			if (channel === null) {
 				continue;
 			}
-			var sb = new Scoreboard(client.channels.get(boards[i]["channel"]["id"]), boards[i]["scores"], boards[i]["users"]);
+			var sb = new Scoreboard(client.channels.cache.get(boards[i]["channel"]["id"]), boards[i]["scores"], boards[i]["users"]);
 			if (this.getScoreboardById(sb.getId()) === null) {
 				this.scoreboards.push(sb);
 				count++;
