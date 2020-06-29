@@ -295,13 +295,13 @@ client.on("message", async message => {
 		var points = amt === 1 ? "point" : "points";
 		success += "Added " + amt + " " + points + " for ";
 		for (let i = 0; i < newargs.length; i++) {
+            if (newargs[i] === "")
+                continue;
+            if (i != 0)
+                success += ", ";
 			success += newargs[i].trim();
-			if (i < newargs.length - 1) {
-				success += ", ";
-			} else {
-				success += ".\n";
-			}
 		}
+		success += ".\n";
 // 		if (th.getTriviaById(message.channel.id) !== null) {
 // 			th.getTriviaById(message.channel.id).getScoreboard().addScores(newargs, amt);
 // 		} else {
@@ -316,13 +316,13 @@ client.on("message", async message => {
 		//}
 
 	}
-	if (success !== "") {
-		message.channel.send(success);	
-	}
+// 	if (success !== "") {
+// 		message.channel.send(success);	
+// 	}
 // 	if (th.getTriviaById(message.channel.id) !== null) {
 // 		th.getTriviaById(message.channel.id).getScoreboard().printScores();
 // 	} else {
-		message.channel.send(scoreboard.buildScoreboard());
+		message.channel.send(scoreboard.buildScoreboard(false, success));
 //	}
   }
   /*if(command === "kick") {

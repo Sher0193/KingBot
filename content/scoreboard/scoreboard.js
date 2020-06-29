@@ -22,13 +22,16 @@ class Scoreboard {
 		return this.channel;
 	}
 	
-	buildScoreboard(end) {
+	buildScoreboard(end, msg) {
 		this.sort();
 		if (this.channel != null) {
             const scoreEmbed = new Discord.MessageEmbed()
             .setColor('RANDOM')
             .setTitle(end ? "Final Score:\n" : "Current Score:\n")
             .setDescription(this.scoresToString(end));
+            if (msg !== undefined) {
+                scoreEmbed.addField("Change:", msg, false);
+            }
 // 			var channel = this.channel;
 // 			channel.send(scoreEmbed);
             return scoreEmbed;
