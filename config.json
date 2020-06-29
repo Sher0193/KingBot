@@ -1,4 +1,5 @@
 { 
-  "token"  : "your token",
-  "prefix" : "!"
+  "token"  : "token",
+  "prefix" : "!",
+  "daemon-mode" : false
 }
