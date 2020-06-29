@@ -16,7 +16,7 @@ const config = require("./config.json");
 // config.token contains the bot's token
 // config.prefix contains the message prefix.
 
-if (config.daemon-mode) {
+if (config.daemon) {
     const daemonizeProcess = require('daemonize-process');
     daemonizeProcess();
 }
