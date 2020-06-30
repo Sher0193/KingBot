@@ -32,8 +32,6 @@ class Scoreboard {
             if (msg !== undefined) {
                 scoreEmbed.addField("Change:", msg, false);
             }
-// 			var channel = this.channel;
-// 			channel.send(scoreEmbed);
             return scoreEmbed;
 		}
 	}

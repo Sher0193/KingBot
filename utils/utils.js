@@ -49,6 +49,12 @@ const levDist = function(s, t) {
     return d[n][m];
 }
 
+const levRatio = function(s, t) {
+
+    return (levDist(s, t) / t.length);
+    
+}
+
 const ordinal = function (n) {
     
     var string = "";
@@ -59,5 +65,6 @@ const ordinal = function (n) {
     
 }
 
+exports.levRatio = levRatio;
 exports.ordinal = ordinal;
 exports.levDist = levDist;

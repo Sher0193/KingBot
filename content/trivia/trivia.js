@@ -20,9 +20,9 @@ class Trivia {
 	
 	scoreboard = null;
 	
-	constructor(channel) {
+	constructor(channel, scoreboard) {
 		this.channel = channel;
-		this.scoreboard = new Scoreboard(channel, null, null);
+		this.scoreboard = scoreboard;
 	}
 	
 		
@@ -30,11 +30,15 @@ class Trivia {
 		return this.channel.id;
 	}
 	
-	printScores(end) {
+	printScores(end, msg) {
 		if (!this.active) {
 			return;
 		}
-		this.scoreboard.printScores(end);
+		if (msg !== "") {
+            this.channel.send(this.scoreboard.buildScoreboard(end, msg));
+        } else {
+            this.channel.send(this.scoreboard.buildScoreboard(end));
+        }
 	}
 	
 	printHelp() {
@@ -53,7 +57,6 @@ class Trivia {
 		this.list = require("../../data/questions.json");
 		if (this.list !== null) {
 			this.channel.send("**Beginning Trivia Game!**\n```Answers accepted after the word \"go\"...```");
-			//this.run();
 		} else {
 			this.active = false;
 			this.channel.send("```No active question list found...```");
@@ -98,12 +101,10 @@ class Trivia {
 		}
 		var trivia = this;
 		this.acceptAnswers = false;
-		var update = "```The correct answer was: \"" + this.list[this.currentQuestion]["answer"] + "\"";
-		
+		var update = "The correct answer was: **" + this.list[this.currentQuestion]["answer"] + "**";
+		var victors = "";
 		if (this.guessers !== null) {
-			update += ("\nCorrect answers from: " + this.guessersToString() + "```");
-		} else {
-			update += "```";
+			victors += ("\nCorrect answers from: " + this.guessersToString() + ".");
 		}
 		this.channel.send(update);
 		this.addScores();
@@ -112,7 +113,7 @@ class Trivia {
 		if (this.currentQuestion >= this.list.length) {
 			this.end();
 		} else {
-			this.printScores();
+			this.printScores(false, victors);
 			if (TIMER_RESUME) {
 				setTimeout(function(){trivia.askQuestion()}, 30000);
 			} else {
@@ -153,15 +154,47 @@ class Trivia {
 		} else {
 			for (let i = 0; i < answers.length; i++) {
 				var a = answers[i];
-				if (cq["type"] === "regular") {
-					if (utils.levDist(guess.toLowerCase(), a["answer"].toLowerCase()) <= 1) {
-						this.addCorrect(guesser);
-						break;
-					}
-				}
+                if (this.checkAns(guess, a)) {
+                    this.addCorrect(guesser);
+                    break;
+                }
 			}
 		}
 	}
+	
+	checkAns(guess, answer) {
+    
+     guess = this.formatAns(guess);
+     answer = this.formatAns(answer);
+     
+     for (let i = 0; i < guess.length; i++) {
+            for (let j = 0; j < guess.length; j++) {
+                let toTest = guess.slice(i, j);
+                if (utils.levRatio(toTest, answer) <= 0.2)
+                    return true;
+            }
+        }
+    }
+    
+    formatAns(ans) {
+        
+        ans = ans.toLowerCase();
+        
+        let removes = ["the ", "a ", "an ", "these ", "those "];
+        for (let i = 0; i < removes.length; i++) {
+            let index = ans.search(removes[i]);
+            if (index > 0)
+                continue;
+            let count = removes[i].length;
+            if (index >= 0) {
+                ans = ans.slice(0, index) + " " + ans.slice(index + count);
+            }
+        }
+        
+        ans = ans.trim();
+        ans = ans.replace("  ", " ");
+        return ans;
+    }
 	
 	checkMultiple(guess, answer) {
 		return (utils.levDist(guess, answer) <= 1

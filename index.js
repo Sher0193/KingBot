@@ -21,7 +21,7 @@ if (config.daemon) {
     daemonizeProcess();
 }
 
-//const th = new TriviaHandler();
+const th = new TriviaHandler();
 const sh = new ScoreboardHandler();
 
 client.on("ready", () => {
@@ -53,10 +53,10 @@ client.on("message", async message => {
   // and not get into a spam loop (we call that "botception").
   if(message.author.bot) return;
   
-//   if(th.getTriviaById(message.channel.id) !== null
-// 	&& th.getTriviaById(message.channel.id).isActive()) {
-// 		th.getTriviaById(message.channel.id).processGuess(message.member.user.username, message.content);
-//   }
+  if(th.getTriviaById(message.channel.id) !== null
+	&& th.getTriviaById(message.channel.id).isActive()) {
+		th.getTriviaById(message.channel.id).processGuess(message.author.toString(), message.content);
+  }
   
   // Also good practice to ignore any message that does not start with our prefix, 
   // which is set in the configuration file.
@@ -71,33 +71,43 @@ client.on("message", async message => {
   
   // Handling for all "trivia" commands
   if(command.includes("trivia")) {
-// 	if (message.member === null) {
-// 		return;
-// 	}
-// 	if (command === "trivia") {
-// 		th.addTrivia(message.channel);
-// 		return;
-// 	}
-// 	if (th.getTriviaById(message.channel.id) === null) {
-// 		return;
-// 	}
-// 	if (command === "triviascores") {
-// 		th.getTriviaById(message.channel.id).printScores();
-// 	}
-// 	if (command === "triviahelp") {
-// 		th.getTriviaById(message.channel.id).printHelp();
-// 	}
-// 	if (command === "triviaend") {
-// 		th.removeTrivia(message.channel.id);
-// 	}
-// 	if (command === "triviapause") {
-// 		message.channel.send("Manual pausing temporarily disabled due to instability. Trivia games will automatically pause between questions.");
-// 		//th.getTriviaById(message.channel.id).pauseGame();
-// 	}
-// 	if (command === "triviaresume") {
-// 		th.getTriviaById(message.channel.id).resume();
-// 	}
-    message.channel.send("Trivia is currently disabled.");
+	if (message.member === null) {
+		return;
+	}
+	if (command === "trivia") {
+        if (sh.getScoreboardById(message.channel.id) !== null) {
+            message.channel.send("Resetting scoreboard...");
+        }
+        sh.addScoreboard(message.channel.id);
+		th.addTrivia(message.channel, sh.getScoreboardById(message.channel.id));
+		return;
+	}
+	if (th.getTriviaById(message.channel.id) === null) {
+		return;
+	}
+	if (command === "triviascores") {
+		th.getTriviaById(message.channel.id).printScores();
+	}
+	if (command === "triviahelp") {
+		th.getTriviaById(message.channel.id).printHelp();
+	}
+	if (command === "triviaend") {
+		th.removeTrivia(message.channel.id);
+        sh.removeScoreboard(message.channel.id)
+	}
+	if (command === "triviapause") {
+		message.channel.send("Manual pausing temporarily disabled due to instability. Trivia games will automatically pause between questions.");
+		//th.getTriviaById(message.channel.id).pauseGame();
+	}
+	if (command === "triviaresume") {
+		th.getTriviaById(message.channel.id).resume();
+	}
+  }
+  
+  if (command === "next") {
+		if (th.getTriviaById(message.channel.id) !== null) {
+			th.getTriviaById(message.channel.id).resume();
+		}
   }
 
   if (command === "about") {
@@ -181,7 +191,7 @@ client.on("message", async message => {
   }
   
   if(command === "lev") {
-	var dist = utils.levDist(args[0], args[1]);
+	var dist = utils.levRatio(args[0], args[1]);
 	message.channel.send("The Levenshtein Distance between " + args[0] + " and " + args[1] + " is " + dist + ".");
   }
   
@@ -205,12 +215,6 @@ client.on("message", async message => {
   if (command === "save") {
 	sh.saveScoreboards();
 	message.channel.send("Saved all scoreboards for all channels.");
-  }
-  
-  if (command === "next") {
-// 		if (th.getTriviaById(message.channel.id) !== null) {
-// 			th.getTriviaById(message.channel.id).resume();
-// 		}
   }
   
   if (command === "uptime") {
@@ -293,15 +297,20 @@ client.on("message", async message => {
 		amt = command === "penalty" ? amt * -1 : command === "half" ? amt * 0.5 : command === "penaltyhalf" ? amt * -0.5 : amt;
 		newargs = arrs[i].join(" ").split(",");
 		var points = amt === 1 ? "point" : "points";
-		success += "Added " + amt + " " + points + " for ";
-		for (let i = 0; i < newargs.length; i++) {
-            if (newargs[i] === "")
+        var next = "Added " + amt + " " + points + " for ";
+        let j, k;
+		for (j = 0, k = 0; j < newargs.length; j++) {
+            if (newargs[j] === "")
                 continue;
-            if (i != 0)
-                success += ", ";
-			success += newargs[i].trim();
+            if (j != 0)
+                next += ", ";
+			next += newargs[j].trim();
+            k++;
 		}
-		success += ".\n";
+		if (k === 0)
+            continue;
+		next += ".\n";
+        success += next;
 // 		if (th.getTriviaById(message.channel.id) !== null) {
 // 			th.getTriviaById(message.channel.id).getScoreboard().addScores(newargs, amt);
 // 		} else {
@@ -322,7 +331,9 @@ client.on("message", async message => {
 // 	if (th.getTriviaById(message.channel.id) !== null) {
 // 		th.getTriviaById(message.channel.id).getScoreboard().printScores();
 // 	} else {
+    if (success !== "") {
 		message.channel.send(scoreboard.buildScoreboard(false, success));
+    }
 //	}
   }
   /*if(command === "kick") {
