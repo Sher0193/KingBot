@@ -144,10 +144,10 @@ client.on("message", async message => {
 			return;
 	}
 	if (args[0] === "create") {
-// 		if (th.getTriviaById(message.channel.id) !== null) {
-// 			message.channel.send("Scoreboard in use by an active Trivia game. Please stop the trivia game with !triviaend first to add a new scoreboard.");
-// 			return;
-// 		}
+ 		if (th.getTriviaById(message.channel.id) !== null) {
+ 			message.channel.send("Scoreboard in use by an active Trivia game. Please stop the trivia game with !triviaend first to add a new scoreboard.");
+ 			return;
+ 		}
 		sh.addScoreboard(message.channel.id);
 		if (sh.getScoreboardById(message.channel.id) !== null) {
 				message.channel.send("Created scoreboard for channel " + message.channel.name);
@@ -156,10 +156,10 @@ client.on("message", async message => {
 				message.channel.send("Could not create scoreboard.");
 		}
 	} else if (args[0] === "clear") {
-// 		if (th.getTriviaById(message.channel.id) !== null) {
-// 			message.channel.send("Scoreboard in use by an active Trivia game. Please stop the trivia game with !triviaend to remove the current scoreboard.");
-// 			return;
-// 		}
+ 		if (th.getTriviaById(message.channel.id) !== null) {
+ 			message.channel.send("Scoreboard in use by an active Trivia game. Please stop the trivia game with !triviaend to remove the current scoreboard.");
+ 			return;
+ 		}
 		if (sh.removeScoreboard(message.channel.id)) {
 			message.channel.send("Removed scoreboard for channel " + message.channel.name);
 			sh.saveScoreboards();
@@ -167,16 +167,12 @@ client.on("message", async message => {
 			message.channel.send("Could not remove scoreboard.");
 		}
 	} else {
-		/*if (th.getTriviaById(message.channel.id) !== null) {
-			th.getTriviaById(message.channel.id).getScoreboard().printScores();
-		} else {*/
 			var scoreboard = sh.getScoreboardById(message.channel.id);
 			if (scoreboard !== null) {
 				message.channel.send(scoreboard.buildScoreboard());
 			} else {
 				message.channel.send("Could not find scoreboard.");
 			}
-		//}
 	}
   }
 
@@ -311,9 +307,6 @@ client.on("message", async message => {
             continue;
 		next += ".\n";
         success += next;
-// 		if (th.getTriviaById(message.channel.id) !== null) {
-// 			th.getTriviaById(message.channel.id).getScoreboard().addScores(newargs, amt);
-// 		} else {
 			if (scoreboard !== null) {		
 				scoreboard.addScores(newargs, amt);
 				sh.saveScoreboards();
@@ -322,19 +315,11 @@ client.on("message", async message => {
 				message.channel.send("Could not find scoreboard.");
 				return;
 			}
-		//}
 
 	}
-// 	if (success !== "") {
-// 		message.channel.send(success);	
-// 	}
-// 	if (th.getTriviaById(message.channel.id) !== null) {
-// 		th.getTriviaById(message.channel.id).getScoreboard().printScores();
-// 	} else {
     if (success !== "") {
 		message.channel.send(scoreboard.buildScoreboard(false, success));
     }
-//	}
   }
   /*if(command === "kick") {
     // This command must be limited to mods and admins. In this example we just hardcode the role names.
