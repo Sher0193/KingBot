@@ -41,10 +41,9 @@ class ScoreboardHandler {
 			jsonSave += JSON.stringify(this.scoreboards[i]);
 			if (i != this.scoreboards.length - 1) {
 				jsonSave += ",";
-			} else {
-				jsonSave += "]"
 			}
 		}
+		jsonSave += "]";
 		fs.writeFile('data/sbsave.json', jsonSave, function (err) {
 			if (err) throw err;
 			//console.log('Saved!');

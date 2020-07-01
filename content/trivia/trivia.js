@@ -168,7 +168,7 @@ class Trivia {
      answer = this.formatAns(answer);
      
      for (let i = 0; i < guess.length; i++) {
-            for (let j = 0; j < guess.length; j++) {
+            for (let j = i; j < guess.length; j++) {
                 let toTest = guess.slice(i, j);
                 if (utils.levRatio(toTest, answer) <= 0.2)
                     return true;
