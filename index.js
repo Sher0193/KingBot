@@ -200,17 +200,24 @@ client.on("message", async message => {
   
   if (command === "sw" || command === "stopwatch") {
         if (isNaN(args[0])) return;
-        if (args[0] > 30) {
-            message.channel.send("No time greater than 30 seconds, please.");
+        if (args[0] % 5 != 0 || args[0] < 0) {
+            message.channel.send("Time must be a denomination of 5" + (args[0] < 0 ? " (and greater than 0)." : "."));
+            return;
+        }
+        if (parseInt(args[0]) > 60) {
+            message.channel.send("Please keep time under 1 minute (60 seconds)");
             return;
         }
         var time = parseInt(args[0]);
         var delay;
-        const m = await message.channel.send(""+time);
-        for (delay = 1000; time > 0; time--, delay += 1000) {
-            setTimeout(function(){ m.edit(""+(time-- === 0 ? "GO" : time) ) }, delay);
+        const m = await message.channel.send(time+" seconds remain.");
+        for (delay = 5000; time > 0; time -= 5, delay += 5000) {
+            setTimeout(function(){ 
+                time -= 5;
+                m.edit(time + " seconds remain.");
+            }, delay);
         }
-        time = parseInt(args[0]) - 1;
+        time = parseInt(args[0]);
   }
   
   if(command === "say") {
