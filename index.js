@@ -198,6 +198,21 @@ client.on("message", async message => {
     m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
   }
   
+  if (command === "sw" || command === "stopwatch") {
+        if (isNaN(args[0])) return;
+        if (args[0] > 30) {
+            message.channel.send("No time greater than 30 seconds, please.");
+            return;
+        }
+        var time = parseInt(args[0]);
+        var delay;
+        const m = await message.channel.send(""+time);
+        for (delay = 1000; time > 0; time--, delay += 1000) {
+            setTimeout(function(){ m.edit(""+(time-- === 0 ? "GO" : time) ) }, delay);
+        }
+        time = parseInt(args[0]) - 1;
+  }
+  
   if(command === "say") {
     // makes the bot say something and delete the message. As an example, it's open to anyone to use. 
     // To get the "message" itself we join the `args` back into a string with spaces: 
