@@ -52,17 +52,17 @@ const levDist = function(s, t) {
 const levRatio = function(s, t) {
 
     return (levDist(s, t) / t.length);
-    
+
 }
 
-const ordinal = function (n) {
-    
+const ordinal = function(n) {
+
     var string = "";
     var sigDigit = n % 10;
     var postfix = sigDigit === 1 && n % 100 != 11 ? "st" : sigDigit === 2 && n % 100 != 12 ? "nd" : sigDigit === 3 && n % 100 != 13 ? "rd" : "th";
     string = n + postfix;
     return string;
-    
+
 }
 
 exports.levRatio = levRatio;
