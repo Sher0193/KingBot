@@ -177,13 +177,22 @@ client.on("message", async message => {
     }
 
     if (command === "roll") {
+        let high = 6,
+            low = 1;
         if (!isNaN(args[0])) {
-            var num = Math.ceil((Math.random() * args[0]));
-            message.channel.send("(1-" + args[0] + ") :game_die: " + num);
-        } else {
-            var num = Math.ceil((Math.random() * 6));
-            message.channel.send("(1-6) :game_die: " + num);
+            let arg0 = parseInt(args[0]);
+            if (!isNaN(args[1])) {
+                let arg1 = parseInt(args[1]);
+                high = arg0 > arg1 ? arg0 : arg1;
+                low = arg0 < arg1 ? arg0 : arg1;
+            } else {
+                high = arg0 > low ? arg0 : low;
+                low = arg0 < low ? arg0 : low;
+            }
         }
+        let range = Math.floor((Math.random() * (high - low + 1)));
+        let roll = range + low;
+        message.channel.send("(" + low + " 🠖 " + high + ") :game_die: " + roll);
     }
 
     if (command === "lev" || command === "levenshtein") {
