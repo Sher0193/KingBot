@@ -192,7 +192,7 @@ client.on("message", async message => {
         }
         let range = Math.floor((Math.random() * (high - low + 1)));
         let roll = range + low;
-        message.channel.send("(" + low + " 🠖 " + high + ") :game_die: " + roll);
+        message.channel.send("(" + low + " -> " + high + ") :game_die: " + roll);
     }
 
     if (command === "lev" || command === "levenshtein") {
