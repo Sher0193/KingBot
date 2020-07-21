@@ -36,6 +36,10 @@
     "explanation" : "``!roll x`` will return a random number between 1 and x. If no number is specified, ``!roll`` returns a number between 1 and 6."
 },
 {
+    "command" : "stopwatch",
+    "explanation" : "``!sw [number]`` or ``!stopwatch [number]`` will begin a countdown starting at the specified number, and decrementing by 5 every 5 seconds."
+},
+{
     "command" : "uptime",
     "explanation" : "How long the bot has been online."
 }
