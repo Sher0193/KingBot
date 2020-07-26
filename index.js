@@ -177,7 +177,7 @@ client.on("message", async message => {
     }
 
     if (command === "roll") {
-        if (args[0] !== undefined && (args[0].toLowerCase() === "s" || args[0].toLowerCase() === "scattegories")) {
+        if (args[0] !== undefined && (args[0].toLowerCase() === "s" || args[0].toLowerCase() === "scattergories")) {
             let valid_scattegory_letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "W"];
             let roll = Math.floor(Math.random() * valid_scattegory_letters.length);
             message.channel.send(":capital_abcd: **" + valid_scattegory_letters[roll] + "**");
