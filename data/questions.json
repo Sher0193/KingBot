@@ -1,13 +1,5 @@
 [
 {
-	"question" : "what's that frog book lol",
-	"type" : "regular",
-	"answer": "The Winds In The Willows",
-	"answers": [
-        "The Winds In The Willows"
-	]
-},
-{
 	"question" : "By what name was the author Eric Blair better known?\nA) Aldous Huxley\nB) George Orwell\nC) Ernest Hemingway\nD) Ray Bradbury",
 	"type" : "multiple",
 	"answer": "B) George Orwell"
