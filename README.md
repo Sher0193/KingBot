@@ -1,7 +1,5 @@
 # KingBot
 
-npm init -y
-
-npm install discord.js@11.6.3
+npm install
 
 node index.js
