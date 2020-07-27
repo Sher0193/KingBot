@@ -272,7 +272,7 @@ const help = function(args, channel) {
     channel.send(helpString);
 }
 
-const score = function(command, args, channel) {
+const score = function(command, args, channel, member) {
     if (member === null) {
         return;
     }
