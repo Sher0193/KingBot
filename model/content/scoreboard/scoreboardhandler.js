@@ -50,7 +50,7 @@ class ScoreboardHandler {
     }
 
     loadScoreboards() {
-        var boards = require("../../data/sbsave.json");
+        var boards = require("../../../data/sbsave.json");
         var count = 0;
 
         for (let i = 0; i < boards.length; i++) {

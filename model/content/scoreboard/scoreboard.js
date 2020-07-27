@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const utils = require('../../utils/utils.js');
+const utils = require('../../../utils/utils.js');
 
 class Scoreboard {
 

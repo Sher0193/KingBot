@@ -1,5 +1,5 @@
 const Scoreboard = require('../scoreboard/scoreboard.js');
-const utils = require('../../utils/utils.js');
+const utils = require('../../../utils/utils.js');
 
 const TIMER_RESUME = false;
 
@@ -54,7 +54,7 @@ class Trivia {
             return;
         }
         this.active = true;
-        this.list = require("../../data/questions.json");
+        this.list = require("../../../data/questions.json");
         if (this.list !== null) {
             this.channel.send("**Beginning Trivia Game!**\n```Answers accepted after the word \"go\"...```");
         } else {
