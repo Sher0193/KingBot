@@ -7,6 +7,9 @@ const utils = require('../../utils/utils.js');
 const th = new TriviaHandler();
 const sh = new ScoreboardHandler();
 
+// Set launch time for uptime calc
+const launchTime = new Date().getTime();
+
 const handleUnprefixedCommand = async function(message) {
     if (th.getTriviaById(message.channel.id) !== null &&
         th.getTriviaById(message.channel.id).isActive()) {

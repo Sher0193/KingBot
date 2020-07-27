@@ -1,9 +1,6 @@
 const utils = require('./utils/utils.js');
 const CommandHandler = require('./model/command/commandhandler.js');
 
-// Set launch time for uptime calc
-const launchTime = new Date().getTime();
-
 // Load up the discord.js library
 const Discord = require("discord.js");
 
