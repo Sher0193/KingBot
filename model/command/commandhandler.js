@@ -2,22 +2,24 @@ const Discord = require("discord.js");
 
 const TriviaHandler = require('../content/trivia/triviahandler.js');
 const ScoreboardHandler = require('../content/scoreboard/scoreboardhandler.js');
+const SantaHandler = require('../content/santa/santahandler.js');
 const utils = require('../../utils/utils.js');
 
 const th = new TriviaHandler();
 const sh = new ScoreboardHandler();
+const santaHandler = new SantaHandler();
 
 // Set launch time for uptime calc
 const launchTime = new Date().getTime();
 
-const handleUnprefixedCommand = async function(message) {
+const handleUnprefixedCommand = async function (message) {
     if (th.getTriviaById(message.channel.id) !== null &&
         th.getTriviaById(message.channel.id).isActive()) {
         th.getTriviaById(message.channel.id).processGuess(message.author.toString(), message.content);
     }
 }
 
-const handleCommand = async function(message, command, args, client) {
+const handleCommand = async function (message, command, args, client) {
 
     let member = message.member;
     let channel = message.channel;
@@ -43,6 +45,7 @@ const handleCommand = async function(message, command, args, client) {
 
     if (command === "score" || command === "half" || command === "penalty" || command === "penaltyhalf" || command === "sc") return score(command, args, channel, member);
 
+    if (command === "santa") return secretSanta(args, channel, client);
 
     /************************************ MINOR COMMANDS ********************************/
 
@@ -94,7 +97,60 @@ const handleCommand = async function(message, command, args, client) {
     }*/
 }
 
-const trivia = function(command, args, channel, member) {
+const secretSanta = function (args, channel, client) {
+    let action = args[0];
+    if (action === "create") {
+        if (santaHandler.getSantaById(channel.id) !== null) {
+            channel.send('Resetting Secret Santa...');
+        }
+        santaHandler.addSanta(channel);
+        channel.send('Started new Secret Santa.');
+        return;
+    }
+    let santa = santaHandler.getSantaById(channel.id);
+    if (santa === null) {
+        channel.send('No active Secret Santa. Please use the create command first.');
+        return;
+    }
+    if (action === "addcouple") {
+        let memberA = args[1];
+        let memberB = args[2];
+        if (!memberA || !memberB) {
+            channel.send('You must include two couple members with this command.');
+        }
+        santa.addCouple([memberA, memberB]);
+        channel.send('Added ' + memberA + ' and ' + memberB + ' as a couple to the Secret Santa.');
+        return;
+    }
+    if (action === "execute") {
+        let assignments = santa.execute();
+        assignments.forEach(async (person) => {
+            let assignedName = assignments[person.assigned].name;
+            let assignedId = assignedName.replace(/[<@>]/g, '');
+            try {
+                let assignedUser = await client.users.fetch(assignedId);
+                // console.log(assignedUser);
+                assignedName = assignedUser.username;
+            } catch (err) {
+
+            }
+
+            let personName = person.name;
+            let personId = personName.replace(/[<@>]/g, '');
+            try {
+                let personUser = await client.users.fetch(personId);
+                // console.log(personUser);
+                await personUser.send('You have been assigned ' + assignedName + '.');
+            } catch (err) {
+
+            }
+
+        });
+        return;
+    }
+}
+
+const trivia = function (command, args, channel, member) {
     if (member === null) {
         return;
     }
@@ -128,7 +184,7 @@ const trivia = function(command, args, channel, member) {
     }
 }
 
-const scoreboard = function(args, channel, member) {
+const scoreboard = function (args, channel, member) {
     if (member === null) {
         return;
     }
@@ -165,7 +221,7 @@ const scoreboard = function(args, channel, member) {
     }
 }
 
-const roll = function(args, channel) {
+const roll = function (args, channel) {
     if (args[0] !== undefined && (args[0].toLowerCase() === "s" || args[0].toLowerCase() === "scattergories")) {
         let valid_scattegory_letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "W"];
         let roll = Math.floor(Math.random() * valid_scattegory_letters.length);
@@ -190,14 +246,14 @@ const roll = function(args, channel) {
     channel.send("(" + low + " -> " + high + ") :game_die: " + roll);
 }
 
-const ping = async function(message, channel, client) {
+const ping = async function (message, channel, client) {
     // Calculates ping between sending a message and editing it, giving a nice round-trip latency.
     // The second ping is an average latency between the bot and the websocket server (one-way, not round-tripiiiiiiiiuuuuu)
     const m = await channel.send("Ping?");
     m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
 }
 
-const stopwatch = async function(args, channel) {
+const stopwatch = async function (args, channel) {
     if (isNaN(args[0])) return;
     if (args[0] % 5 != 0 || args[0] < 0) {
         channel.send("Time must be a denomination of 5" + (args[0] < 0 ? " (and greater than 0)." : "."));
@@ -211,7 +267,7 @@ const stopwatch = async function(args, channel) {
     var delay;
     const m = await channel.send(time + " seconds remain.");
     for (delay = 5000; time > 0; time -= 5, delay += 5000) {
-        setTimeout(function() {
+        setTimeout(function () {
             time -= 5;
             m.edit(time + " seconds remain.");
         }, delay);
@@ -219,17 +275,17 @@ const stopwatch = async function(args, channel) {
     time = parseInt(args[0]);
 }
 
-const say = function(message, args, channel) {
+const say = function (message, args, channel) {
     // makes the bot say something and delete the message. As an example, it's open to anyone to use. 
     // To get the "message" itself we join the `args` back into a string with spaces: 
     const sayMessage = args.join(" ");
     // Then we delete the command message (sneaky, right?). The catch just ignores the error with a cute smiley thing.
-    message.delete().catch(O_o => {});
+    message.delete().catch(O_o => { });
     // And we get the bot to say the thing: 
     channel.send(sayMessage);
 }
 
-const uptime = function(channel) {
+const uptime = function (channel) {
     let curTime = new Date().getTime();
     let uptime = curTime - launchTime;
 
@@ -245,7 +301,7 @@ const uptime = function(channel) {
     channel.send("Kingbot has been online for " + (days > 0 ? (days + " day" + (days === 1 ? "" : "s") + ", ") : "") + (hours > 0 ? (hours + " hour" + (hours === 1 ? "" : "s") + ", ") : "") + minutes + " minute" + (minutes === 1 ? ("") : "s") + ".");
 }
 
-const help = function(args, channel) {
+const help = function (args, channel) {
     let helpString = "Something went wrong. Contact admin.";
     let commandList = "";
     let list = require("../../data/help.json");
@@ -275,7 +331,7 @@ const help = function(args, channel) {
     channel.send(helpString);
 }
 
-const score = function(command, args, channel, member) {
+const score = function (command, args, channel, member) {
     if (member === null) {
         return;
     }
